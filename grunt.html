@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Grunt JS, budapest.js, 25/11/2013</title>
+
+		<meta name="description" content="Slides for my lightning talk about Grunt.js at budapest.js, 25/11/2013">
+		<meta name="author" content="Jozsef Kozma">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/solarized.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<div class="slides">
+				<section>
+					<h1>Kinja</h1>
+					<p>
+						The platform behind Cink, Gizmodo, io9 & Lifehacker
+					</p>
+					<p>
+						Server-side: play.scala, closure-templates.soy
+					</p>
+					<p>
+						Client-side: backbone.js, require.js, closure-templates.js, foundation.scss
+					</p>
+				</section>
+
+				<section>
+					<h2>20 deploys a day</h2>
+					<ul>
+						<li>fully automated after a Git push</li>
+						<li>build & deploy by Jenkins took 12 minutes</li>
+						<li>downside: deployment needed a full JVM restart</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Lots of frontend changes</h2>
+					<p>
+						80% of changesets didn't change .scala at all
+					</p>
+					<p>
+						JVM restart is an overkill
+					</p>
+				</section>
+
+				<section>
+					<h2>So we changed it</h2>
+					<p>
+						80% of our changesets are live in <a href="http://tech.kinja.com/avoiding-jvm-restarts-when-doing-asset-only-deploys-1458697546">2 minutes</a> now
+					</p>
+				</section>
+
+				<section>
+					<h2>
+						SBT.tasks.moveto(Grunt)
+					</h2>
+					<ul>
+						<li>no need to use Play! this way</li>
+						<li>our SBT knowledge is kind of limited</li>
+						<li>our frontend team is full of JS devs</li>
+						<li>had good experiences with Grunt already</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Grunt is great</h2>
+					<ul>
+						<li>Grunt is the JS task runner</li>
+						<li>"there's a task for that"</li>
+						<li>"there's an API"</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>During development</h2>
+					<p>
+						Grunt Watch is used for
+						<ul>
+							<li>.soy to .js transforms</li>
+							<li>.scss to .css transforms</li>
+							<li>JSHinting</li>
+						</ul>
+				</section>
+
+				<section>
+					<h2>During a build</h2>
+					<p>
+						Series of tasks are run against our code
+						<ul>
+							<li>Code quality checks (JSHint, JSComplexity)</li>
+							<li>.scss to .css transforms</li>
+							<li>.soy to .js transforms</li>
+							<li>generating .js source</li>
+							<li>requirejs</li>
+							<li>uglify</li>
+							<li>md5</li>
+						</ul>
+				</section>
+
+				<section>
+					<h2>Interested?</h2>
+					<ul>
+						<li>Check Grunt API, it's great</li>
+						<li><a href="http://tech.kinja.com/handling-500-lines-of-gruntfile-js-1470211529">explode</a> your Gruntfile.js and DRY your config</li>
+						<li><a href="http://tech.kinja.com/handling-500-lines-of-gruntfile-js-1470211529">see others</a> too</li>
+					</ul>
+				</section>
+
+				<section>
+					<h1>EOM</h1>
+					<h3>Obviously, we're hiring</h3>
+					<p>
+						mailto:joco@gawker.com
+					</p>
+				</section>
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
