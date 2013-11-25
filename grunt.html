@@ -96,6 +96,117 @@
 				</section>
 
 				<section>
+					<h2>An example</h2>
+					<pre><code data-trim contenteditable>
+module.exports = function (grunt) {
+  'use strict';
+
+  # configuration happens here
+  grunt.initConfig({
+    pkg: grunt.file.readJSON('package.json'),
+
+    jshint: {
+      options: {
+        jshintrc: '.jshintrc',
+        reporter: require('jshint-stylish'),
+        force: true
+      },
+
+      # this is the task jshint:dev
+      dev: {
+        src: [
+          'public/javascripts/**/*.js'
+        ]
+      },
+
+      # this is the task jshint:build
+      build: {
+        options: {
+          reporter: 'jslint',
+          reporterOutput: 'target/grunt/contrib-jshint.xml'
+        },
+        src: [
+          'public/javascripts/**/*.js',
+          '!public/javascripts/generated/**/*.js'
+        ]
+      }
+    },
+
+    # watch can run tasks whenever a file is changed, very
+    # useful during development
+    watch: {
+      jshint: {
+
+        # these are the files being watched
+        files: [
+          'public/javascripts/**/*.js'
+        ],
+
+        # the task to run on any change
+        tasks: [
+          'jshint:dev'
+        ],
+        options: {
+          spawn: false
+        }
+      }
+    },
+
+    # this task will copy any *.css to filename-{md5}.css
+    md5: {
+      compile: {
+        files: [
+          {
+            src: 'stylesheets/**/*.css',
+            dest: 'stylesheets'
+          }
+        ],
+        options: {
+          encoding: null,
+          keepBasename: true,
+          keepExtension: true
+        }
+      }
+    }
+  });
+
+  # on a watch:jshint event we want to jshint that very file only
+  grunt.event.on('watch', function (action, filePath, target) {
+    if (target === 'jshint') {
+      grunt.config('jshint.dev.src', filePath);
+    }
+  });
+
+  # load all installed grunt tasks
+  grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-md5');
+
+  # calling grunt without a task specified will run
+  # jshint:build and then md5
+  grunt.registerTask('default', [
+    'jshint:build',
+    'md5
+  ]);
+};
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Usage</h2>
+					<pre><code data-trim contenteditable>
+# will run a build
+grunt
+
+# will run jshint on all JS files
+grunt jshint:dev
+
+# will start grunt watch
+grunt watch
+					</code></pre>
+				</section>
+
+				<section>
 					<h2>During development</h2>
 					<p>
 						Grunt Watch is used for
